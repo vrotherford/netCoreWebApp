@@ -10,5 +10,7 @@ namespace DBRepository
         public DbSet<Tournament> Tournaments { get; set; }
         public DbSet<Round> Rounds { get; set; }
         public DbSet<Task> Tasks { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
     }
 }

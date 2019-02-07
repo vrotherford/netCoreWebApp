@@ -3,15 +3,19 @@ import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
 import * as Counter from './Counter';
 import * as WeatherForecasts from './WeatherForecasts';
-import * as TournamentReducer from './TournamentReducer';
-import * as RoundReducer from './RoundReducer';
+import * as TournamentReducer from '../Containers/Tournaments/TournamentsReducer';
+import * as RoundReducer from '../Containers/Round/RoundReducer';
+import * as RegistrationReducer from '../Containers/Registration/RegistrationReducer';
+import * as LoginReducer from '../Containers/Login/LoginReducer';
 
 export default function configureStore(history, initialState) {
   const reducers = {
     counter: Counter.reducer,
       weatherForecasts: WeatherForecasts.reducer,
       tournamentReducer: TournamentReducer.reducer,
-      roundReducer: RoundReducer.reducer
+      roundReducer: RoundReducer.reducer,
+      registrationReducer: RegistrationReducer.reducer,
+      loginReducer: LoginReducer.reducer
   };
 
   const middleware = [

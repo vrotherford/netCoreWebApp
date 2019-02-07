@@ -4,8 +4,10 @@ import Layout from './components/Layout';
 import Home from './components/Home';
 import Counter from './components/Counter';
 import FetchData from './components/FetchData';
-import TournamentList from './components/TournamentList';
-import Round from './components/Round';
+import TournamentList from './Containers/Tournaments/Tournaments';
+import Round from './Containers/Round/Round';
+import Registration from '../src/Containers/Registration/Registration';
+import Login from '../src/Containers/Login/Login';
 
 export default () => (
   <Layout>
@@ -14,5 +16,7 @@ export default () => (
         <Route path='/fetchdata/:startDateIndex?' component={FetchData} />
         <Route path='/tournamentlist' component={TournamentList} />
         <Route path='/round/:roundID/:startTaskIndex' component={Round} />
+        <Route path='/registration' component={Registration} />
+        <Route path='/login' component={Login} />
   </Layout>
 );

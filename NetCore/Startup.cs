@@ -8,6 +8,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Models;
 using Interfaces;
 using DBRepository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Services;
+using System.Net;
+using System;
 
 namespace NetCore
 {
@@ -32,10 +38,35 @@ namespace NetCore
             });
             services.AddMvc()
     .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(Configuration.GetValue<string>("JWTSecretKey"))
+                        )
+                    };
+                });
+
+            services.AddSingleton<IAuthService>(
+                new AuthService(
+                    Configuration.GetValue<string>("JWTSecretKey"),
+                    Configuration.GetValue<int>("JWTLifespan")
+                )
+            );
+
             services.AddScoped<IBasicContextFactrory, BasicContextFactory>();
             services.AddScoped<IRoundRepository>(provider => new RoundRepository(Configuration.GetConnectionString("DefaultConnection"), provider.GetService<IBasicContextFactrory>()));
             services.AddScoped<ITournamentRepository>(provider => new TournamentRepository(Configuration.GetConnectionString("DefaultConnection"), provider.GetService<IBasicContextFactrory>()));
             services.AddScoped<ITaskRepository>(provider => new TaskRepository(Configuration.GetConnectionString("DefaultConnection"), provider.GetService<IBasicContextFactrory>()));
+            services.AddScoped<IBasicRepository<User>>(provider => new UserRepository(Configuration.GetConnectionString("DefaultConnection"), provider.GetService<IBasicContextFactrory>()));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +86,8 @@ namespace NetCore
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            app.UseAuthentication();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -71,6 +104,15 @@ namespace NetCore
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+
+            app.UseStatusCodePages(async context => {
+                var response = context.HttpContext.Response;
+
+                if (response.StatusCode == (int)HttpStatusCode.Unauthorized ||
+                    response.StatusCode == (int)HttpStatusCode.Forbidden)
+                    response.Redirect("/Login");
+            });
+
         }
     }
 }

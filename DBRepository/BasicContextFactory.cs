@@ -10,7 +10,7 @@ namespace DBRepository
         public BasicContext CreateDbContext(string connectionString)
         {
             var optionsBuilder = new DbContextOptionsBuilder<BasicContext>();
-            optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename='C:\\Users\\Boris\\source\\repos\\testWebApp\\testWebApp\\App_Data\\TournamentsContext.mdf';Integrated Security=True");
+            optionsBuilder.UseSqlServer("Data Source='Localhost';Initial Catalog= TournamentsDB;Integrated Security=True");
             return new BasicContext(optionsBuilder.Options);
         }
     }

@@ -1,9 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionCreators } from '../store/RoundReducer';
-import './TournamentList.css'
-import { Link } from 'react-router-dom';
+import { actionCreators } from './RoundActions';
 
 class Round extends Component {
     constructor() {
@@ -16,7 +14,7 @@ class Round extends Component {
 
     componentWillMount() {
         const roundID = this.props.match.params.roundID || '';
-        const startTaskIndex = parseInt(this.props.match.params.startTaskIndex,10) || 0;
+        const startTaskIndex = parseInt(this.props.match.params.startTaskIndex, 10) || 0;
         this.props.requestRoundTasks(roundID, startTaskIndex);
     }
 
@@ -59,7 +57,7 @@ class Round extends Component {
             <div>
                 a
             </div>
-            );
+        );
     }
 }
 
@@ -72,13 +70,23 @@ function renderRoundTasks(props) {
     return (
         <div>
             {slicedData.map(task =>
-                <div key={task.id} className="row">
-                    <div className="col-xl-1">
-                        <div id="tourInfo" className="row">
-                            <div id="leftTourInfo" className="col-lg-6">
-                                <h1 className="text-center">{task.text}</h1>
-                                <p className="text-center">{task.answer}</p>
-                            </div>
+                <div class="task" key={task.id}>
+                    <div class="taskUpperBlock">
+                        <div class="taskPhoto">
+
+                        </div>
+                    </div>
+                    <div class="taskLowerBlock">
+                        <div class="taskText">
+                            <h3>Task 1</h3>
+                            <p>{task.text}</p>
+                        </div>
+                        <div class="taskAnswer">
+                            <form>
+                                <h3>Answer</h3>
+                                <textarea class="answerInput" ></textarea>
+                                <button type="submit" class="nextTask">Next task</button>
+                            </form>
                         </div>
                     </div>
                 </div>

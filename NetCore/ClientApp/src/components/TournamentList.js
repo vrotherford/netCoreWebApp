@@ -12,12 +12,21 @@ class TournamentList extends Component {
 
 
     render() {
-        return (
-            <div>
-                {this.props.isLoading ? <span>Loading...</span> : []}
-                {renderTournamentsBloks(this.props)}
-            </div>
-        );
+        if (this.props.length !== 0) {
+            return (
+                <div>
+                    {this.props.isLoading ? <span>Loading...</span> : []}
+                    {renderTournamentsBloks(this.props)}
+                </div>
+            );
+        }
+        else {
+            return (
+                <div>
+                    {this.props.isLoading ? <span>Loading...</span> : []}
+                </div>
+                );
+        }
     }
 }
 
@@ -50,7 +59,7 @@ function findMax(data) {
     var max;
     if (data.length != 0) {
         max = data.reduce(function (prev, current) {
-            return (prev.number > current.number && prev.isStarted) ? prev : (current.isStarted ? current : [])
+            return (current.number > prev.number && current.isStarted) ? current : (prev.isStarted ? prev : [])
         }) 
     }
     return max;
